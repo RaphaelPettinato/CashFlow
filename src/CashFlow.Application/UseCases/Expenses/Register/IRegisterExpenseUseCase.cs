@@ -1,0 +1,9 @@
+﻿using CashFlow.Communication.Responses;
+using CashFlow.Communication.Requests;
+
+namespace CashFlow.Application.UseCases.Expenses.Register;
+public interface IRegisterExpenseUseCase
+{
+    Task<ResponseRegisterExpenseJson> Execute(RequestRegisterExpenseJson request);
+
+}

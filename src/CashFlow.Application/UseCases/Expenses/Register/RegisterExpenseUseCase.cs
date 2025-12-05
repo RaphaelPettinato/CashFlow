@@ -1,13 +1,37 @@
 ﻿using CashFlow.Communication.Requests;
 using CashFlow.Communication.Responses;
+using CashFlow.Domain.Entities;
+using CashFlow.Domain.Repositories;
+using CashFlow.Domain.Repositories.Expenses;
 using CashFlow.Exception.ExceptionsBase;
 
 namespace CashFlow.Application.UseCases.Expenses.Register;
-public class RegisterExpenseUseCase
+public class RegisterExpenseUseCase : IRegisterExpenseUseCase
 {
-    public ResponseRegisterExpenseJson Execute(RequestRegisterExpenseJson request)
+    private readonly IExpensesRepository _repository;
+    private readonly IUnitOfWork _unitOfWork;
+    public RegisterExpenseUseCase(IExpensesRepository repository, IUnitOfWork unitOfWork)
+    {
+        _repository = repository;
+        _unitOfWork = unitOfWork;
+    }
+
+    public async Task<ResponseRegisterExpenseJson> Execute(RequestRegisterExpenseJson request)
     {
         Validate(request);
+
+        var entity = new Expense
+        {
+            Amount = request.Amount,
+            Date = request.Date,
+            Description = request.Description,
+            Title = request.Title,
+            PaymentType = (Domain.Enums.PaymentType)request.PaymentType
+        };
+
+        await _repository.Add(entity);
+
+        await _unitOfWork.Commit();
 
         return new ResponseRegisterExpenseJson();
     }
