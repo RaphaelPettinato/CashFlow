@@ -8,8 +8,8 @@ public class ResponseErrorJson
         ErrorMessages = [errorMessage];
     }
 
-    public ResponseErrorJson(List<string> errorMessages)
+    public ResponseErrorJson(List<string> errorMessage)
     {
-        ErrorMessages = errorMessages;
+        ErrorMessages = errorMessage;
     }
 }
